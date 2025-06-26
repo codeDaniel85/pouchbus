@@ -136,15 +136,15 @@ const data = {
       items: [
         {
           title: "Dashboard",
-          url: "#",
+          url: "dashboard",
         },
         {
           title: "Users",
-          url: "#",
+          url: "users",
         },
         {
           title: "Company",
-          url: "#",
+          url: "company",
         },
         {
           title: "Routes & Bus Stop",
