@@ -47,7 +47,7 @@ const data = {
       title: "Users",
       url: "#",
       icon: User,
-      isActive: true,
+      isActive: false,
       items: [
         {
           title: "Dashboard",
@@ -133,26 +133,27 @@ const data = {
       title: "System Admin",
       url: "#",
       icon: Computer,
+      isActive: true,
       items: [
         {
           title: "Dashboard",
-          url: "dashboard",
+          url: "dashboard-page",
         },
         {
           title: "Users",
-          url: "users",
+          url: "users-page",
         },
         {
-          title: "Company",
-          url: "company",
+          title: "Companys",
+          url: "companys-page",
         },
         {
-          title: "Routes & Bus Stop",
+          title: "Routes & Bus Stops",
           url: "#",
         },
         {
-          title: "Vehicle",
-          url: "#",
+          title: "Vehicles",
+          url: "vehicles-page",
         },
         {
           title: "# All Requests",

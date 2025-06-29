@@ -9,6 +9,8 @@ import {
 } from "~/common/components/ui/card"
 import { Input } from "~/common/components/ui/input"
 import { Label } from "~/common/components/ui/label"
+import { ShineBorder } from "~/common/components/ui/shine-border"
+import { BorderBeam } from "../ui/border-beam"
 
 export function LoginForm({
   className,
@@ -16,7 +18,7 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="relative overflow-hidden">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
@@ -79,13 +81,18 @@ export function LoginForm({
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
+                <a href="/agree-page" className="underline underline-offset-4">
                   Sign up
                 </a>
               </div>
             </div>
           </form>
         </CardContent>
+        <BorderBeam
+          duration={6}
+          size={400}
+          className="from-transparent via-violet-700 to-transparent"
+        />
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}

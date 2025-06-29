@@ -1,6 +1,6 @@
 import { BusIcon, GalleryVerticalEnd } from "lucide-react"
 
-import { LoginForm } from "~/common/components/login/login-form"
+import { LoginForm } from "~/common/components/form/login-form"
 
 export default function LoginPage() {
   return (
