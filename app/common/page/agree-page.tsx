@@ -61,9 +61,9 @@ export default function AgreePage() {
                                         </Button>
                                     </Link>
                                     <div className="text-center text-sm">
-                                        Don&apos;t have an account?{" "}
+                                        이미 Pouch Bus 회원이신가요?{" "}
                                         <a href="#" className="underline underline-offset-4">
-                                            Sign up
+                                            Login
                                         </a>
                                     </div>
                                 </div>

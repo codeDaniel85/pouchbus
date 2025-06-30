@@ -73,7 +73,7 @@ export function SignupForm({
                 Sign up
               </Button>
               <div className="text-center text-sm">
-                Already have an account?{" "}
+                이미 Pouch Bus 회원이신가요?{" "}
                 <a href="/login-page" className="underline underline-offset-4">
                   Login
                 </a>
