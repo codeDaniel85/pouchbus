@@ -144,7 +144,7 @@ const data = {
           url: "users-page",
         },
         {
-          title: "Companys",
+          title: "Companies",
           url: "companys-page",
         },
         {

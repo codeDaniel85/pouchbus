@@ -2,7 +2,6 @@ CREATE TYPE "public"."signup_type" AS ENUM('email', 'google', 'apple', 'kakao', 
 CREATE TABLE "profiles" (
 	"user_id" uuid PRIMARY KEY NOT NULL,
 	"login_id" varchar(50) NOT NULL,
-	"password" varchar(255) NOT NULL,
 	"user_name" varchar(50) NOT NULL,
 	"phone_number" varchar(20),
 	"avatar" text,

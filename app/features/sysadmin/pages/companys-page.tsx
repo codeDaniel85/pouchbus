@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, type ComponentProps } from "react"
 import { AppSidebar } from "~/common/components/sidebar/app-sidebar"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "~/common/components/ui/button"
@@ -42,52 +42,59 @@ import {
 import {
     type ColumnDef,
 } from "@tanstack/react-table"
+import { getCompanies } from "../queries"
+import type { Route } from "./+types/companys-page"
 
-const data: Properties[] = [
-    {
-        company_id: "m5gr84i9",
-        company_name: "노마드코더",
-        company_code: "1234567890",
-        company_address: "서울시 강남구 역삼동",
-        company_tel: "010-1111-5678",
-    },
-    {
-        company_id: "3u1reuv4",
-        company_name: "파우치치",
-        company_code: "1234567890",
-        company_address: "서울시 강남구 역삼동",
-        company_tel: "010-2222-5678",
-    },
-    {
-        company_id: "derv1ws0",
-        company_name: "카카오",
-        company_code: "1234567890",
-        company_address: "서울시 강남구 역삼동",
-        company_tel: "010-3333-5678",
-    },
-    {
-        company_id: "5kma53ae",
-        company_name: "테슬라",
-        company_code: "1234567890",
-        company_address: "서울시 강남구 역삼동",
-        company_tel: "010-4444-5678",
-    },
-    {
-        company_id: "bhqecj4p",
-        company_name: "현대자동차",
-        company_code: "1234567890",
-        company_address: "서울시 강남구 역삼동",
-        company_tel: "010-5555-5678",
-    },
-]
-export type Properties = {
-    company_id: string
+// const data: Properties[] = [
+//     {
+//         company_id: "m5gr84i9",
+//         company_name: "노마드코더",
+//         company_code: "1234567890",
+//         company_address: "서울시 강남구 역삼동",
+//         company_tel: "010-1111-5678",
+//     },
+//     {
+//         company_id: "3u1reuv4",
+//         company_name: "파우치치",
+//         company_code: "1234567890",
+//         company_address: "서울시 강남구 역삼동",
+//         company_tel: "010-2222-5678",
+//     },
+//     {
+//         company_id: "derv1ws0",
+//         company_name: "카카오",
+//         company_code: "1234567890",
+//         company_address: "서울시 강남구 역삼동",
+//         company_tel: "010-3333-5678",
+//     },
+//     {
+//         company_id: "5kma53ae",
+//         company_name: "테슬라",
+//         company_code: "1234567890",
+//         company_address: "서울시 강남구 역삼동",
+//         company_tel: "010-4444-5678",
+//     },
+//     {
+//         company_id: "bhqecj4p",
+//         company_name: "현대자동차",
+//         company_code: "1234567890",
+//         company_address: "서울시 강남구 역삼동",
+//         company_tel: "010-5555-5678",
+//     },
+// ]
+
+// 1. 타입 정의
+export interface columnProps {
+    company_id: number
+    company_status: string
+    company_business_number: string
     company_name: string
-    company_code: string
     company_address: string
-    company_tel: string
+    company_phone: string
+    created_at: string
 }
-export const columns: ColumnDef<Properties>[] = [
+// 2. columns 정의
+export const columns: ColumnDef<columnProps>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -144,9 +151,9 @@ export const columns: ColumnDef<Properties>[] = [
         cell: ({ row }) => <div className="lowercase">{row.getValue("company_address")}</div>,
     },
     {
-        accessorKey: "company_tel",
+        accessorKey: "company_phone",
         header: () => <div>Company Tel Number</div>,
-        cell: ({ row }) => <div className="lowercase">{row.getValue("company_tel")}</div>,
+        cell: ({ row }) => <div className="lowercase">{row.getValue("company_phone")}</div>,
     },
     {
         accessorKey: "company_id",
@@ -169,9 +176,9 @@ export const columns: ColumnDef<Properties>[] = [
                     <DropdownMenuContent align="start">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(properties.company_id)}
+                            onClick={() => navigator.clipboard.writeText(properties.company_business_number)}
                         >
-                            Copy Company ID
+                            Copy Company Business No.
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>View Company details</DropdownMenuItem>
@@ -182,10 +189,19 @@ export const columns: ColumnDef<Properties>[] = [
     },
 ]
 
-export default function Page() {
+// 3. loader에서 companies 반환
+export const loader = async () => {
+    const company = await getCompanies();
+    return { company }
+}
+
+// 4. 컴포넌트에서 사용용
+export default function Page({ loaderData }: Route.ComponentProps) {
+    const companies = loaderData.company as columnProps[];
+
     const filterColumns = [
         { key: "company_name", placeholder: "업체명으로 검색..." },
-        { key: "company_code", placeholder: "업체코드로 검색..." },
+        { key: "company_business_number", placeholder: "사업자번호로 검색..." },
         { key: "company_address", placeholder: "업체주소로 검색..." },
     ]
 
@@ -259,7 +275,7 @@ export default function Page() {
                                 </Dialog>
                             </div>
                             {/* 업체 목록 table */}
-                            <DataTable data={data} columns={columns} filterColumns={filterColumns} />
+                            <DataTable data={companies} columns={columns} filterColumns={filterColumns} />
 
                         </div>
                     </div>

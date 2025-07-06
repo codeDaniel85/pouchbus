@@ -42,46 +42,55 @@ import {
 import {
     type ColumnDef,
 } from "@tanstack/react-table"
+import { getUsers } from "../queries"
+import { useLoaderData } from "react-router";
+import type { User } from "@supabase/supabase-js"
+import type { Route } from "./+types/users-page"
 
-const data: Properties[] = [
-    {
-        id: "m5gr84i9",
-        name: "김철수",
-        email: "ken99@example.com",
-        phone: "010-1111-5678",
-    },
-    {
-        id: "3u1reuv4",
-        name: "김영희",
-        email: "Abe45@example.com",
-        phone: "010-2222-5678",
-    },
-    {
-        id: "derv1ws0",
-        name: "이철수",
-        email: "Monserrat44@example.com",
-        phone: "010-3333-5678",
-    },
-    {
-        id: "5kma53ae",
-        name: "박영희",
-        email: "Silas22@example.com",
-        phone: "010-4444-5678",
-    },
-    {
-        id: "bhqecj4p",
-        name: "최철수",
-        email: "carmella@example.com",
-        phone: "010-5555-5678",
-    },
-]
-export type Properties = {
-    id: string
-    name: string
-    email: string
-    phone: string
+
+// const data: Properties[] = [
+//     // {
+//     //     id: "m5gr84i9",
+//     //     name: "김철수",
+//     //     email: "ken99@example.com",
+//     //     phone: "010-1111-5678",
+//     // },
+//     // {
+//     //     id: "3u1reuv4",
+//     //     name: "김영희",
+//     //     email: "Abe45@example.com",
+//     //     phone: "010-2222-5678",
+//     // },
+//     // {
+//     //     id: "derv1ws0",
+//     //     name: "이철수",
+//     //     email: "Monserrat44@example.com",
+//     //     phone: "010-3333-5678",
+//     // },
+//     // {
+//     //     id: "5kma53ae",
+//     //     name: "박영희",
+//     //     email: "Silas22@example.com",
+//     //     phone: "010-4444-5678",
+//     // },
+//     // {
+//     //     id: "bhqecj4p",
+//     //     name: "최철수",
+//     //     email: "carmella@example.com",
+//     //     phone: "010-5555-5678",
+//     // },
+// ]
+
+// 1. 타입 정의
+export interface columnProps {
+    user_id: string;
+    user_name: string;
+    login_id: string;
+    created_at: string;
 }
-export const columns: ColumnDef<Properties>[] = [
+
+// 2. columns 정의
+export const columns: ColumnDef<columnProps>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -105,7 +114,7 @@ export const columns: ColumnDef<Properties>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "name",
+        accessorKey: "user_name",
         header: ({ column }) => {
             return (
                 <Button
@@ -118,11 +127,11 @@ export const columns: ColumnDef<Properties>[] = [
             )
         },
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("name")}</div>
+            <div className="capitalize">{row.getValue("user_name")}</div>
         ),
     },
     {
-        accessorKey: "email",
+        accessorKey: "login_id",
         header: ({ column }) => {
             return (
                 <Button
@@ -134,12 +143,12 @@ export const columns: ColumnDef<Properties>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        cell: ({ row }) => <div className="lowercase">{row.getValue("login_id")}</div>,
     },
     {
-        accessorKey: "phone",
-        header: "Phone Number",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
+        accessorKey: "created_at",
+        header: "Created At",
+        cell: ({ row }) => <div className="lowercase">{row.getValue("created_at")}</div>,
         //header: () => <div className="text-right">Phone Number</div>,
         // cell: ({ row }) => {
         //     const phone = parseFloat(row.getValue("phone"))
@@ -167,7 +176,7 @@ export const columns: ColumnDef<Properties>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(properties.id)}
+                            onClick={() => navigator.clipboard.writeText(properties.user_id)}
                         >
                             Copy Users ID
                         </DropdownMenuItem>
@@ -180,11 +189,20 @@ export const columns: ColumnDef<Properties>[] = [
     },
 ]
 
-export default function Page() {
+// 3. loader에서 users 반환
+export const loader = async () => {
+    const users = await getUsers(); // columnProps[]
+    return { users };
+}
+
+// 4. 컴포넌트에서 사용
+export default function Page({ loaderData }: Route.ComponentProps) {
+    const users = loaderData.users as columnProps[];
+    console.log("users.length() = " + users.length + "\nloaderData = " + users)
     const filterColumns = [
-        { key: "name", placeholder: "이름으로 검색..." },
-        { key: "email", placeholder: "이메일로 검색..." },
-        { key: "phone", placeholder: "전화번호로 검색..." },
+        { key: "user_name", placeholder: "이름으로 검색..." },
+        { key: "login_id", placeholder: "이메일로 검색..." },
+        // { key: "created_at", placeholder: "가입일로 검색..." },
     ]
 
     return (
@@ -252,7 +270,7 @@ export default function Page() {
                                 </Dialog>
                             </div>
                             {/* 회원 목록 table */}
-                            <DataTable data={data} columns={columns} filterColumns={filterColumns} />
+                            <DataTable data={users} columns={columns} filterColumns={filterColumns} />
 
                         </div>
                     </div>

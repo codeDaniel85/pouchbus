@@ -9,7 +9,6 @@ export const signupType = pgEnum("signup_type", ["email", "google", "apple", "ka
 export const profiles = pgTable("profiles", {
     user_id: uuid().primaryKey().references(() => users.id, { onDelete: "cascade" }),
     login_id: varchar("login_id", { length: 50 }).notNull().unique(),
-    password: varchar("password", { length: 255 }).notNull(),
     user_name: varchar("user_name", { length: 50 }).notNull(),
     phone_number: varchar("phone_number", { length: 20 }),
     avatar: text("avatar"),
