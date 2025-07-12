@@ -9,6 +9,6 @@ export default [
     route("dashboard-page", "common/page/dashboard-page.tsx"),
 
     route("users-page", "features/sysadmin/pages/users-page.tsx"),
-    route("companys-page", "features/sysadmin/pages/companys-page.tsx"),
+    route("companies-page", "features/sysadmin/pages/companies-page.tsx"),
     route("vehicles-page", "features/sysadmin/pages/vehicles-page.tsx"),
 ] satisfies RouteConfig;

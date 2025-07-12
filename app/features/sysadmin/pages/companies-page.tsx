@@ -43,7 +43,8 @@ import {
     type ColumnDef,
 } from "@tanstack/react-table"
 import { getCompanies } from "../queries"
-import type { Route } from "./+types/companys-page"
+import type { Route } from "./+types/companies-page"
+import { makeSSRClient } from "../../../supabase-client"
 
 // const data: Properties[] = [
 //     {
@@ -93,6 +94,7 @@ export interface columnProps {
     company_phone: string
     created_at: string
 }
+
 // 2. columns 정의
 export const columns: ColumnDef<columnProps>[] = [
     {
@@ -190,14 +192,15 @@ export const columns: ColumnDef<columnProps>[] = [
 ]
 
 // 3. loader에서 companies 반환
-export const loader = async () => {
-    const company = await getCompanies();
-    return { company }
+export const loader = async ({ request }: Route.LoaderArgs) => {
+    const { client } = makeSSRClient(request);
+    const companies = await getCompanies(client);
+    return { companies }
 }
 
 // 4. 컴포넌트에서 사용용
 export default function Page({ loaderData }: Route.ComponentProps) {
-    const companies = loaderData.company as columnProps[];
+    const companies = loaderData.companies as columnProps[];
 
     const filterColumns = [
         { key: "company_name", placeholder: "업체명으로 검색..." },

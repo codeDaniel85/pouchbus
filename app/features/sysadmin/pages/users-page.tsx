@@ -43,9 +43,8 @@ import {
     type ColumnDef,
 } from "@tanstack/react-table"
 import { getUsers } from "../queries"
-import { useLoaderData } from "react-router";
-import type { User } from "@supabase/supabase-js"
 import type { Route } from "./+types/users-page"
+import { makeSSRClient } from "../../../supabase-client"
 
 
 // const data: Properties[] = [
@@ -190,8 +189,9 @@ export const columns: ColumnDef<columnProps>[] = [
 ]
 
 // 3. loader에서 users 반환
-export const loader = async () => {
-    const users = await getUsers(); // columnProps[]
+export const loader = async ({ request }: Route.LoaderArgs) => {
+    const { client } = makeSSRClient(request);
+    const users = await getUsers(client); // columnProps[]
     return { users };
 }
 

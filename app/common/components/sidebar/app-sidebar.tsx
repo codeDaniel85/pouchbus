@@ -145,7 +145,7 @@ const data = {
         },
         {
           title: "Companies",
-          url: "companys-page",
+          url: "companies-page",
         },
         {
           title: "Routes & Bus Stops",
