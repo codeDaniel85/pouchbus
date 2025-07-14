@@ -1,4 +1,7 @@
-import { pgEnum, pgSchema, pgTable, serial, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { pgEnum, pgPolicy, pgSchema, pgTable, serial, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { authenticatedRole, authUid } from "drizzle-orm/supabase";
+import { roles } from "../roles/schema";
 
 const users = pgSchema("auth").table("users", {
     id: uuid().primaryKey(),
@@ -21,5 +24,11 @@ export const profiles = pgTable("profiles", {
     etc_5: text("etc_5"),
     created_at: timestamp("created_at").notNull().defaultNow(),
     updated_at: timestamp("updated_at").notNull().defaultNow(),
-});
+}, (table) => [
+    pgPolicy("profiles_select_policy", {
+        as: "permissive",
+        for: "select",
+        to: authenticatedRole,
+    })
+]);
 

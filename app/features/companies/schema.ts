@@ -1,4 +1,7 @@
-import { pgTable, text, bigint, timestamp } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { pgTable, text, bigint, timestamp, pgPolicy } from "drizzle-orm/pg-core";
+import { authenticatedRole, authUid } from "drizzle-orm/supabase";
+import { roles } from "../roles/schema";
 
 export const companies = pgTable("companies", {
     company_id: bigint({ mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
@@ -13,4 +16,25 @@ export const companies = pgTable("companies", {
     company_description: text("company_description"),
     created_at: timestamp("created_at").notNull().defaultNow(),
     updated_at: timestamp("updated_at").notNull().defaultNow(),
-});
+}, (table) => [
+    pgPolicy("companies_select_policy", {
+        as: "permissive",
+        for: "select",
+        to: authenticatedRole,
+    }),
+    pgPolicy("companies_insert_policy", {
+        as: "permissive",
+        for: "insert",
+        to: authenticatedRole,
+    }),
+    pgPolicy("companies_update_policy", {
+        as: "permissive",
+        for: "update",
+        to: authenticatedRole,
+    }),
+    pgPolicy("companies_delete_policy", {
+        as: "permissive",
+        for: "delete",
+        to: authenticatedRole,
+    }),
+]);

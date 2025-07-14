@@ -94,7 +94,7 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
                         </a>
                       </div>
                       <Input name="password" id="password" type="password" required />
-                      {/* {actionData?.message.error && <p className="text-red-500">{actionData.message.error}</p>} */}
+                      {actionData?.message.error && <p className="text-red-500">{actionData.message.error}</p>}
                     </div>
                     <Button type="submit" className="w-full" disabled={isSubmitting}>
                       {isSubmitting ? <LoaderCircle className="size-4 animate-spin" /> : "Login"}
