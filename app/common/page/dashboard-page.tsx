@@ -35,8 +35,34 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "~/common/components/ui/carousel"
+import type { Route } from "./+types/dashboard-page"
 
-export default function Page() {
+
+export const action = async ({ request }: Route.ActionArgs) => {
+  if (request.method !== "POST") {
+    return new Response("Method not allowed", { status: 405 });
+  } else {
+    console.log("Method allowed. Method is " + request.method);
+  }
+  const header = request.headers.get("X-WEATHER");
+  if (!header || header !== "X-TODAY-WEATHER") {
+    return new Response("Unauthorized", { status: 401 });
+  } else {
+    console.log("header = " + header);
+  }
+  const response = await fetch("https://api.openweathermap.org/data/2.5/weather?q=seoul&appid=1234567890");
+  const data = await response.json();
+  console.log("data = " + JSON.stringify(data));
+  // const formData = await request.formData();   
+  // const weather = formData.get("weather");
+  // console.log("weather = " + weather);
+  return {
+    header: header
+  }
+}
+
+export default function Page({ actionData }: Route.ComponentProps) {
+  console.log("actionData.header = " + actionData?.header);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -130,6 +156,13 @@ export default function Page() {
                   </TableRow>
                 </TableBody>
               </Table> */}
+              {/* 오늘 날씨 api - cron job 연계 */}
+              <div className="flex flex-row items-center justify-between p-4">
+                <h1 className="text-2xl text-violet-700 font-bold">오늘 날씨</h1>
+                <p>오늘 날씨는 어때요?</p>
+                <p>{actionData?.header?.toString()}</p>
+              </div>
+
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
                 h1 : Title
               </h1>
