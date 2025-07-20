@@ -180,7 +180,12 @@ export const columns: ColumnDef<columnProps>[] = [
                             Copy Users ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View Users details</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => {
+                                console.log("clicked user_id = " + properties.user_id)
+
+                            }}
+                        >View Users details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

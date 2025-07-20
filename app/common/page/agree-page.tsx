@@ -1,7 +1,6 @@
-import { BusIcon, Check } from "lucide-react"
+import { BusIcon } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Label } from "../components/ui/label"
-import { Input } from "../components/ui/input"
 import { Button } from "../components/ui/button"
 import { Checkbox } from "../components/ui/checkbox"
 import { Textarea } from "../components/ui/textarea"
@@ -42,21 +41,19 @@ export default function AgreePage() {
                                             <Checkbox id="required_agree_1" />
                                             <Label htmlFor="required_agree_1">[필수] 개인정보 수집 및 이용 동의</Label>
                                         </div>
-                                        <Textarea id="required_agree_1_textarea" placeholder="전체 동의하기" disabled>
-                                            Pouch Bus에 오신 것을 환영합니다.
-                                            Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다.
+                                        <Textarea id="required_agree_1_textarea" placeholder="전체 동의하기" defaultValue="Pouch Bus에 오신 것을 환영합니다.
+                                            Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다." readOnly>
                                         </Textarea>
                                         <div className="flex items-center space-x-2">
                                             <Checkbox id="optional_agree_1" />
                                             <Label htmlFor="optional_agree_1">[선택] 위치 정보 수집 및 이용 동의</Label>
                                         </div>
-                                        <Textarea id="optional_agree_1_textarea" placeholder="전체 동의하기" disabled>
-                                            Pouch Bus에 오신 것을 환영합니다.
-                                            Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다.
+                                        <Textarea id="optional_agree_1_textarea" placeholder="전체 동의하기" defaultValue="Pouch Bus에 오신 것을 환영합니다.
+                                            Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다." readOnly>
                                         </Textarea>
                                     </div>
-                                    <Link to="/signup-page">
-                                        <Button type="submit" className="w-full">
+                                    <Link to="/signup-page" className="w-full">
+                                        <Button type="button" className="w-full">
                                             다음
                                         </Button>
                                     </Link>
@@ -81,6 +78,6 @@ export default function AgreePage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
