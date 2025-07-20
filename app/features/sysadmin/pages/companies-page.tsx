@@ -1,6 +1,6 @@
-import React, { Component, type ComponentProps } from "react"
+import React, { Component, type ComponentProps, useState } from "react"
 import { AppSidebar } from "~/common/components/sidebar/app-sidebar"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react"
 import { Button } from "~/common/components/ui/button"
 import { Checkbox } from "~/common/components/ui/checkbox"
 import { Input } from "~/common/components/ui/input"
@@ -45,6 +45,7 @@ import {
 import { getCompanies } from "../queries"
 import type { Route } from "./+types/companies-page"
 import { makeSSRClient } from "../../../supabase-client"
+import { AlertDialog, AlertDialogTrigger, AlertDialogTitle, AlertDialogHeader, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogDescription } from "~/common/components/ui/alert-dialog"
 
 // const data: Properties[] = [
 //     {
@@ -95,8 +96,8 @@ export interface columnProps {
     created_at: string
 }
 
-// 2. columns 정의
-export const columns: ColumnDef<columnProps>[] = [
+// 2. columns 정의 함수
+export const createColumns = (onDeleteClick: (company: columnProps) => void): ColumnDef<columnProps>[] => [
     {
         id: "select",
         header: ({ table }) => (
@@ -184,12 +185,63 @@ export const columns: ColumnDef<columnProps>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>View Company details</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onDeleteClick(properties);
+                            }}
+                            className="text-red-500 flex flex-row gap-2"
+                        >
+                            <Trash2 className="size-4" />
+                            Delete Company
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
         },
     },
 ]
+
+interface DeleteCompanyDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    companyName: string;
+}
+
+export function DeleteCompanyDialog({ isOpen, onClose, onConfirm, companyName }: DeleteCompanyDialogProps) {
+    return (
+        <AlertDialog open={isOpen} onOpenChange={onClose}>
+            <AlertDialogContent className="w-[95vw] max-w-md mx-auto sm:max-w-lg md:max-w-xl rounded-lg border shadow-lg">
+                <AlertDialogHeader className="space-y-3">
+                    <AlertDialogTitle className="text-lg sm:text-xl font-semibold text-center">
+                        업체를 삭제하시겠습니까?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-sm sm:text-base text-center leading-relaxed">
+                        <span className="font-medium text-foreground">'{companyName}'</span> 업체를 삭제합니다.
+                        <br />
+                        이 작업은 되돌릴 수 없으며, 업체와 관련된 모든 데이터가 영구적으로 삭제됩니다.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-6">
+                    <AlertDialogCancel
+                        onClick={onClose}
+                        className="w-full sm:w-auto order-2 sm:order-1 rounded-md"
+                    >
+                        취소
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                        onClick={onConfirm}
+                        className="w-full sm:w-auto order-1 sm:order-2 bg-violet-700 hover:bg-violet-600 focus:ring-violet-500 rounded-md"
+                    >
+                        삭제
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    )
+}
+
 
 // 3. loader에서 companies 반환
 export const loader = async ({ request }: Route.LoaderArgs) => {
@@ -198,15 +250,37 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
     return { companies }
 }
 
-// 4. 컴포넌트에서 사용용
+// 4. 컴포넌트에서 사용
 export default function Page({ loaderData }: Route.ComponentProps) {
     const companies = loaderData.companies as columnProps[];
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [selectedCompany, setSelectedCompany] = useState<columnProps | null>(null);
 
     const filterColumns = [
         { key: "company_name", placeholder: "업체명으로 검색..." },
         { key: "company_business_number", placeholder: "사업자번호로 검색..." },
         { key: "company_address", placeholder: "업체주소로 검색..." },
     ]
+
+    const handleDeleteClick = (company: columnProps) => {
+        setSelectedCompany(company);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        if (selectedCompany) {
+            console.log("Deleting company:", selectedCompany.company_name);
+            // 여기에 실제 삭제 로직 추가
+            // await deleteCompany(selectedCompany.company_id);
+        }
+        setDeleteDialogOpen(false);
+        setSelectedCompany(null);
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setSelectedCompany(null);
+    };
 
     return (
         <SidebarProvider>
@@ -278,7 +352,17 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                                 </Dialog>
                             </div>
                             {/* 업체 목록 table */}
-                            <DataTable data={companies} columns={columns} filterColumns={filterColumns} />
+                            <DataTable data={companies} columns={createColumns(handleDeleteClick)} filterColumns={filterColumns} />
+
+                            {/* 삭제 확인 다이얼로그 */}
+                            {selectedCompany && (
+                                <DeleteCompanyDialog
+                                    isOpen={deleteDialogOpen}
+                                    onClose={handleDeleteCancel}
+                                    onConfirm={handleDeleteConfirm}
+                                    companyName={selectedCompany.company_name}
+                                />
+                            )}
 
                         </div>
                     </div>

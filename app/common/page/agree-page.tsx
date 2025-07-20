@@ -41,15 +41,13 @@ export default function AgreePage() {
                                             <Checkbox id="required_agree_1" />
                                             <Label htmlFor="required_agree_1">[필수] 개인정보 수집 및 이용 동의</Label>
                                         </div>
-                                        <Textarea id="required_agree_1_textarea" placeholder="전체 동의하기" defaultValue="Pouch Bus에 오신 것을 환영합니다.
-                                            Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다." readOnly>
+                                        <Textarea id="required_agree_1_textarea" placeholder="전체 동의하기" defaultValue="Pouch Bus에 오신 것을 환영합니다. Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다." readOnly>
                                         </Textarea>
                                         <div className="flex items-center space-x-2">
                                             <Checkbox id="optional_agree_1" />
                                             <Label htmlFor="optional_agree_1">[선택] 위치 정보 수집 및 이용 동의</Label>
                                         </div>
-                                        <Textarea id="optional_agree_1_textarea" placeholder="전체 동의하기" defaultValue="Pouch Bus에 오신 것을 환영합니다.
-                                            Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다." readOnly>
+                                        <Textarea id="optional_agree_1_textarea" placeholder="전체 동의하기" defaultValue="Pouch Bus에 오신 것을 환영합니다. Pouch Bus 서비스(이하 ‘서비스’)를 이용해 주셔서 감사합니다." readOnly>
                                         </Textarea>
                                     </div>
                                     <Link to="/signup-page" className="w-full">
