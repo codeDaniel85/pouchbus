@@ -24,12 +24,12 @@ export const action = async ({ request }: Route.ActionArgs) => {
   const { success, error, data } = formSchema.safeParse(Object.fromEntries(formData));
 
   if (!success) {
-    return { formErrors: error.flatten().fieldErrors }
+    return { formErrors: error.flatten().fieldErrors, signUpError: null }
   }
 
   const isEmailExists = await getEmailExists(request, { email: data.email })
   if (isEmailExists) {
-    return { formErrors: { email: ["Email already exists"] } }
+    return { formErrors: { email: ["Email already exists"] }, signUpError: null }
   }
 
   const { client, headers } = makeSSRClient(request)
@@ -46,7 +46,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
   })
   if (signUpError) {
     console.log("Sign up error:", signUpError);
-    return { signUpError: signUpError.message }
+    return { signUpError: signUpError.message, formErrors: null }
   } else {
     console.log("Sign up success");
     return redirect("/", { headers })

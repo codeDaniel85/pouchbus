@@ -4,23 +4,52 @@ import type { Route } from "./+types/login-page"
 import { cn } from "~/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/common/components/ui/card";
 import { BorderBeam } from "~/common/components/ui/border-beam";
-import { Form, useNavigation } from "react-router";
+import { Form, redirect, useNavigation } from "react-router";
 import { Button } from "~/common/components/ui/button";
 import { Label } from "~/common/components/ui/label";
 import { Input } from "~/common/components/ui/input";
+import { z } from "zod";
+import { makeSSRClient } from "~/supabase-client";
+
+
+const formSchema = z.object({
+  email: z.email({
+    message: "Invalid email address",
+  }).nonempty({
+    message: "Email is required",
+  }).transform((val) => val.toLowerCase()).refine((val) => val.includes("@") && val.includes("."), {
+    message: "Invalid email address",
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters",
+  })
+})
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const formData = await request.formData();
-  const email = formData.get("email");
-  const password = formData.get("password");
-  console.log(email, password);
-  // console.log("login page ");
+  console.log(formData);
+  const { success, error, data } = formSchema.safeParse(Object.fromEntries(formData));
 
-  return {
-    message: {
-      error: "Invalid email or password",
+  // console.log("login page ");
+  if (!success) {
+    return {
+      formErrors: error.flatten().fieldErrors,
+      loginError: null
     }
   }
+
+  const { client, headers } = makeSSRClient(request)
+  const { error: loginError } = await client.auth.signInWithPassword({
+    email: data.email,
+    password: data.password,
+  })
+  if (loginError) {
+    console.log("Login error:", loginError);
+    return { loginError: loginError.message, formErrors: null }
+  }
+
+  return redirect("/", { headers })
+
 }
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
@@ -82,6 +111,7 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
                         placeholder="m@example.com"
                         required
                       />
+                      {actionData && "formErrors" in actionData && (<p className="text-red-500">{actionData.formErrors?.email}</p>)}
                     </div>
                     <div className="grid gap-2">
                       <div className="flex items-center">
@@ -94,11 +124,12 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
                         </a>
                       </div>
                       <Input name="password" id="password" type="password" required />
-                      {actionData?.message.error && <p className="text-red-500">{actionData.message.error}</p>}
+                      {actionData && "formErrors" in actionData && (<p className="text-red-500">{actionData.formErrors?.password}</p>)}
                     </div>
                     <Button type="submit" className="w-full" disabled={isSubmitting}>
                       {isSubmitting ? <LoaderCircle className="size-4 animate-spin" /> : "Login"}
                     </Button>
+                    {actionData && "loginError" in actionData && (<p className="text-red-500">{actionData.loginError}</p>)}
                   </div>
                   <div className="text-center text-sm">
                     Don&apos;t have an account?{" "}
