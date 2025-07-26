@@ -1,0 +1,198 @@
+{
+  "buildManifest": {
+    "serverBundles": {
+      "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0": {
+        "id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+        "file": "build/server/nodejs_eyJydW50aW1lIjoibm9kZWpzIn0/index.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    },
+    "routeIdToServerBundleId": {
+      "common/page/home-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "common/page/login-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "common/page/agree-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "common/page/signup-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "common/page/welcome-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "common/page/dashboard-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "features/sysadmin/pages/users-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "features/sysadmin/pages/companies-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "features/sysadmin/pages/vehicles-page": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
+    },
+    "routes": {
+      "root": {
+        "path": "",
+        "id": "root",
+        "file": "app/root.tsx",
+        "config": {}
+      },
+      "common/page/home-page": {
+        "id": "common/page/home-page",
+        "parentId": "root",
+        "file": "app/common/page/home-page.tsx",
+        "index": true,
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "common/page/login-page": {
+        "id": "common/page/login-page",
+        "parentId": "root",
+        "file": "app/common/page/login-page.tsx",
+        "path": "login-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "common/page/agree-page": {
+        "id": "common/page/agree-page",
+        "parentId": "root",
+        "file": "app/common/page/agree-page.tsx",
+        "path": "agree-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "common/page/signup-page": {
+        "id": "common/page/signup-page",
+        "parentId": "root",
+        "file": "app/common/page/signup-page.tsx",
+        "path": "signup-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "common/page/welcome-page": {
+        "id": "common/page/welcome-page",
+        "parentId": "root",
+        "file": "app/common/page/welcome-page.tsx",
+        "path": "welcome-email",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "common/page/dashboard-page": {
+        "id": "common/page/dashboard-page",
+        "parentId": "root",
+        "file": "app/common/page/dashboard-page.tsx",
+        "path": "dashboard-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "features/sysadmin/pages/users-page": {
+        "id": "features/sysadmin/pages/users-page",
+        "parentId": "root",
+        "file": "app/features/sysadmin/pages/users-page.tsx",
+        "path": "users-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "features/sysadmin/pages/companies-page": {
+        "id": "features/sysadmin/pages/companies-page",
+        "parentId": "root",
+        "file": "app/features/sysadmin/pages/companies-page.tsx",
+        "path": "companies-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "features/sysadmin/pages/vehicles-page": {
+        "id": "features/sysadmin/pages/vehicles-page",
+        "parentId": "root",
+        "file": "app/features/sysadmin/pages/vehicles-page.tsx",
+        "path": "vehicles-page",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    }
+  },
+  "reactRouterConfig": {
+    "appDirectory": "C:/workspace_react/pouchbus/app",
+    "basename": "/",
+    "buildDirectory": "C:/workspace_react/pouchbus/build",
+    "future": {
+      "unstable_middleware": false,
+      "unstable_optimizeDeps": false,
+      "unstable_splitRouteModules": false,
+      "unstable_subResourceIntegrity": false,
+      "unstable_viteEnvironmentApi": false
+    },
+    "routes": {
+      "root": {
+        "path": "",
+        "id": "root",
+        "file": "root.tsx"
+      },
+      "common/page/home-page": {
+        "id": "common/page/home-page",
+        "parentId": "root",
+        "file": "common/page/home-page.tsx",
+        "index": true
+      },
+      "common/page/login-page": {
+        "id": "common/page/login-page",
+        "parentId": "root",
+        "file": "common/page/login-page.tsx",
+        "path": "login-page"
+      },
+      "common/page/agree-page": {
+        "id": "common/page/agree-page",
+        "parentId": "root",
+        "file": "common/page/agree-page.tsx",
+        "path": "agree-page"
+      },
+      "common/page/signup-page": {
+        "id": "common/page/signup-page",
+        "parentId": "root",
+        "file": "common/page/signup-page.tsx",
+        "path": "signup-page"
+      },
+      "common/page/welcome-page": {
+        "id": "common/page/welcome-page",
+        "parentId": "root",
+        "file": "common/page/welcome-page.tsx",
+        "path": "welcome-email"
+      },
+      "common/page/dashboard-page": {
+        "id": "common/page/dashboard-page",
+        "parentId": "root",
+        "file": "common/page/dashboard-page.tsx",
+        "path": "dashboard-page"
+      },
+      "features/sysadmin/pages/users-page": {
+        "id": "features/sysadmin/pages/users-page",
+        "parentId": "root",
+        "file": "features/sysadmin/pages/users-page.tsx",
+        "path": "users-page"
+      },
+      "features/sysadmin/pages/companies-page": {
+        "id": "features/sysadmin/pages/companies-page",
+        "parentId": "root",
+        "file": "features/sysadmin/pages/companies-page.tsx",
+        "path": "companies-page"
+      },
+      "features/sysadmin/pages/vehicles-page": {
+        "id": "features/sysadmin/pages/vehicles-page",
+        "parentId": "root",
+        "file": "features/sysadmin/pages/vehicles-page.tsx",
+        "path": "vehicles-page"
+      }
+    },
+    "routeDiscovery": {
+      "mode": "lazy",
+      "manifestPath": "/__manifest"
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": true
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}
