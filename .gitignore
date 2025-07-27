@@ -8,4 +8,4 @@
 
 # React Email
 #/react-email-starter/ # vercel에서 배포할 때 사용해야하기 때문에 vercel-github 연동을 위해 github에 배포 필요.
-/react-email-starter/node_modules
+/react-email-starter/node_modules/

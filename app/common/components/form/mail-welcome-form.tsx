@@ -1,12 +1,11 @@
+import * as React from 'react';
 import {
     Body,
     Button,
-    Column,
     Container,
     Head,
     Heading,
     Html,
-    Img,
     Link,
     Preview,
     pixelBasedPreset,
@@ -15,7 +14,6 @@ import {
     Tailwind,
     Text,
 } from '@react-email/components';
-import type * as React from 'react';
 
 interface WelcomeEmailProps {
     username: string;
