@@ -46,6 +46,7 @@ import { getCompanies } from "../queries"
 import type { Route } from "./+types/companies-page"
 import { makeSSRClient } from "../../../supabase-client"
 import { AlertDialog, AlertDialogTrigger, AlertDialogTitle, AlertDialogHeader, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogDescription } from "~/common/components/ui/alert-dialog"
+import { useIsMobile } from "../../../hooks/use-mobile"
 
 // const data: Properties[] = [
 //     {
@@ -176,7 +177,7 @@ export const createColumns = (onDeleteClick: (company: columnProps) => void): Co
                             <MoreHorizontal />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
+                    <DropdownMenuContent align="start" side="bottom">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() => navigator.clipboard.writeText(properties.company_business_number)}
@@ -255,6 +256,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
     const companies = loaderData.companies as columnProps[];
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedCompany, setSelectedCompany] = useState<columnProps | null>(null);
+    const isMobile = useIsMobile();
 
     const filterColumns = [
         { key: "company_name", placeholder: "업체명으로 검색..." },
@@ -299,7 +301,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
-                                    <BreadcrumbPage>Users</BreadcrumbPage>
+                                    <BreadcrumbPage>Companies</BreadcrumbPage>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -308,14 +310,14 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
                     <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
                         <div className="flex flex-col gap-4">
-                            <div className="flex flex-row items-center justify-between p-4">
-                                <h1 className="text-2xl text-violet-700 font-bold">전체 업체관리</h1>
+                            <div className={`flex ${isMobile ? 'flex-col gap-4' : 'flex-row'} items-center justify-between p-4`}>
+                                <h1 className={`${isMobile ? 'text-xl' : 'text-2xl'} text-violet-700 font-bold`}>전체 업체관리</h1>
                                 <Dialog>
                                     <form>
                                         <DialogTrigger asChild>
                                             <Button className="flex flex-row gap-4 z-10">업체등록</Button>
                                         </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[425px]">
+                                        <DialogContent className={`${isMobile ? 'w-[95vw] max-w-[95vw]' : 'sm:max-w-[425px]'}`}>
                                             <DialogHeader>
                                                 <DialogTitle>신규 업체 등록</DialogTitle>
                                                 <DialogDescription>

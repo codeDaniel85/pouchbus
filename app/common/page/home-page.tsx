@@ -18,6 +18,7 @@ import { BadgeCheck, ChevronsUpDown } from "lucide-react";
 import { CreditCard } from "lucide-react";
 import { Bell } from "lucide-react";
 import { LogOut } from "lucide-react";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 
 const loginData = {
@@ -38,6 +39,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
     const navigation = useNavigation();
     const isLoading = navigation.state === "loading";
     const isLoggedIn = loaderData.user !== null;
+    const isMobile = useIsMobile();
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-background">
             {isLoggedIn ?
@@ -56,14 +58,14 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                     </Avatar>
                                     <div className="grid flex-1 text-left text-sm leading-tight">
                                         <span className="truncate font-semibold">{loginData.user.name}</span>
-                                        <span className="truncate text-xs">{loginData.user.email}</span>
+                                        {!isMobile && <span className="truncate text-xs">{loginData.user.email}</span>}
                                     </div>
                                     <ChevronsUpDown className="ml-auto size-4" />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                                side="right"
+                                side="bottom"
                                 align="end"
                                 sideOffset={4}
                             >
@@ -75,7 +77,7 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
                                         </Avatar>
                                         <div className="grid flex-1 text-left text-sm leading-tight">
                                             <span className="truncate font-semibold">{loginData.user.name}</span>
-                                            <span className="truncate text-xs">{loginData.user.email}</span>
+                                            {!isMobile && <span className="truncate text-xs">{loginData.user.email}</span>}
                                         </div>
                                     </div>
                                 </DropdownMenuLabel>
