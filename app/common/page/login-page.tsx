@@ -10,6 +10,8 @@ import { Label } from "~/common/components/ui/label";
 import { Input } from "~/common/components/ui/input";
 import { z } from "zod";
 import { makeSSRClient } from "~/supabase-client";
+import { useErrorMessage } from "../../hooks/use-error-message";
+import { ErrorAlert } from "../components/ui/error-alert";
 
 
 const formSchema = z.object({
@@ -49,12 +51,12 @@ export const action = async ({ request }: Route.ActionArgs) => {
   }
 
   return redirect("/", { headers })
-
 }
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const isSubmitting = navigation.state === "submitting" || navigation.state === "loading";
+  const { errorMessage, showError, clearError, validateRequired, validateEmail, validatePassword } = useErrorMessage();
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -76,6 +78,7 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
             <CardContent>
               <Form method="post">
                 <div className="grid gap-6">
+                  <ErrorAlert message={errorMessage} />
                   <div className="flex flex-col gap-4">
                     <Button variant="outline" className="w-full">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

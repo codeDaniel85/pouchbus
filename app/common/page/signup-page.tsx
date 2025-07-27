@@ -1,11 +1,14 @@
-import { BusIcon } from "lucide-react"
+import { BusIcon, CheckCircle2Icon } from "lucide-react"
 
 import { SignupForm } from "~/common/components/form/signup-form"
 import type { Route } from "./+types/signup-page"
 import { makeSSRClient } from "../../supabase-client"
-import { redirect } from "react-router"
+import { useNavigate } from "react-router"
 import { z } from "zod"
 import { getEmailExists } from "~/common/queries"
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
+import { useErrorMessage } from "../../hooks/use-error-message"
+import { ErrorAlert } from "../components/ui/error-alert"
 
 const formSchema = z.object({
   email: z.email(),
@@ -41,7 +44,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
         user_name: data.userName,
         phone_number: data.phoneNumber,
       },
-      emailRedirectTo: `${new URL(request.url).origin}/auth/callback`,
+      emailRedirectTo: `${new URL(request.url).origin}/welcome-page?email=${data.email}&name=${data.userName}`,
     }
   })
   if (signUpError) {
@@ -49,11 +52,34 @@ export const action = async ({ request }: Route.ActionArgs) => {
     return { signUpError: signUpError.message, formErrors: null }
   } else {
     console.log("Sign up success");
-    return redirect("/", { headers })
+    return { signUpError: null, formErrors: null, success: true }
   }
+
 }
 
 export default function SignupPage({ actionData }: Route.ComponentProps) {
+  const navigate = useNavigate();
+  const { errorMessage, showError, clearError } = useErrorMessage();
+
+  // 성공 상태일 때 Alert 표시 후 redirect
+  if (actionData?.success) {
+    setTimeout(() => {
+      navigate("/");
+    }, 3000); // 3초 후 redirect
+
+    return (
+      <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+        <Alert className="max-w-sm">
+          <CheckCircle2Icon className="h-4 w-4" />
+          <AlertTitle>회원가입 성공!</AlertTitle>
+          <AlertDescription>
+            이메일을 확인하여 인증을 완료해주세요. 3초 후 홈페이지로 이동합니다.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10" >
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -63,6 +89,7 @@ export default function SignupPage({ actionData }: Route.ComponentProps) {
           </div>
           Pouch Bus
         </a>
+        <ErrorAlert message={errorMessage} />
         <SignupForm actionData={actionData} />
       </div>
     </div >

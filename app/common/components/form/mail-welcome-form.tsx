@@ -123,7 +123,7 @@ export const WelcomeEmail = ({
                         <Section className="text-center">
                             <Link href="https://pouchbus.com">
                                 <Button className="rounded-lg bg-violet-700 px-[18px] py-3 text-white">
-                                    Go to your dashboard
+                                    Go to Pouch Bus
                                 </Button>
                             </Link>
                             {/* <Link href="https://pouchbus.com">

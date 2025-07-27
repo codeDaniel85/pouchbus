@@ -4,9 +4,10 @@ export default [
     index("common/page/home-page.tsx"),
 
     route("login-page", "common/page/login-page.tsx"),
+    route("logout-page", "common/page/logout-page.tsx"),
     route("agree-page", "common/page/agree-page.tsx"),
     route("signup-page", "common/page/signup-page.tsx"),
-    route("welcome-email", "common/page/welcome-page.tsx"),
+    route("welcome-page", "common/page/welcome-page.tsx"),
     route("dashboard-page", "common/page/dashboard-page.tsx"),
 
     route("users-page", "features/sysadmin/pages/users-page.tsx"),

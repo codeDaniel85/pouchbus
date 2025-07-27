@@ -14,6 +14,8 @@ import { BorderBeam } from "../ui/border-beam"
 import { Form, useNavigation } from "react-router"
 import type { Route } from "../../page/+types/signup-page"
 import { LoaderCircle } from "lucide-react"
+import { useErrorMessage } from "../../../hooks/use-error-message"
+import { ErrorAlert } from "../ui/error-alert"
 
 export function SignupForm({
   actionData,
@@ -21,7 +23,8 @@ export function SignupForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & { actionData: Route.ComponentProps["actionData"] }) {
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const isSubmitting = navigation.state === "submitting" || navigation.state === "loading";
+  const { errorMessage, showError, clearError, validateRequired, validateEmail, validatePassword, validatePhoneNumber } = useErrorMessage();
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="relative overflow-hidden">
@@ -34,6 +37,7 @@ export function SignupForm({
         <CardContent>
           <Form method="post">
             <div className="grid gap-6">
+              <ErrorAlert message={errorMessage} />
               <div className="flex flex-col gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>

@@ -3,9 +3,11 @@ import {
   Links,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
   useNavigation,
+  type MetaFunction,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -13,6 +15,16 @@ import "./app.css";
 // import Navigation from "./common/components/navigation";
 import { Header } from "./common/header";
 import { makeSSRClient } from "./supabase-client";
+import { cn } from "./lib/utils";
+import { getUserById } from "./features/users/queries";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Pouch Bus" },
+    { name: "description", content: "Welcome to Pouch Bus." },
+  ];
+}
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -47,18 +59,37 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const { client } = makeSSRClient(request);
   const { data: { user } } = await client.auth.getUser();
-  return { user };
+
+  if (user && user.id) {
+    // const { data: { session } } = await client.auth.getSession();
+    // if (session) {
+    //   return redirect("/dashboard");
+    // }
+    const profile = await getUserById(client, { id: user.id });
+    return { user, profile };
+  }
+  return { user: null, profile: null };
 }
 
 export default function App({ loaderData }: Route.ComponentProps) {
-  const isLoggedIn = loaderData.user !== null;
   const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
+  const isLoggedIn = loaderData.user !== null;
   return (
-    <>
+    <div className={cn({
+      "transition-opacity duration-300": isLoading,
+      "opacity-0": isLoading,
+      "opacity-100": !isLoading,
+      "pointer-events-none": isLoading,
+    })}>
       <Header />
       {/* <Navigation /> */}
-      <Outlet />
-    </>
+      <Outlet context={{
+        isLoggedIn,
+        user: loaderData.user,
+        profile: loaderData.profile
+      }} />
+    </div>
   );
 }
 
